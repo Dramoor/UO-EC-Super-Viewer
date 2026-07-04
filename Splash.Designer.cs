@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Splash));
             this.lblCraftedBy = new System.Windows.Forms.Label();
+            this.lblUpdatedBy = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -45,6 +46,17 @@
             this.lblCraftedBy.Size = new System.Drawing.Size(86, 13);
             this.lblCraftedBy.TabIndex = 0;
             this.lblCraftedBy.Text = "Crafted By Pinco";
+            // 
+            // lblUpdatedBy
+            // 
+            this.lblUpdatedBy.AutoSize = true;
+            this.lblUpdatedBy.BackColor = System.Drawing.Color.Transparent;
+            this.lblUpdatedBy.ForeColor = System.Drawing.Color.DarkRed;
+            this.lblUpdatedBy.Location = new System.Drawing.Point(300, 254);
+            this.lblUpdatedBy.Name = "lblUpdatedBy";
+            this.lblUpdatedBy.Size = new System.Drawing.Size(86, 13);
+            this.lblUpdatedBy.TabIndex = 0;
+            this.lblUpdatedBy.Text = "Updated By Dramoor";
             // 
             // pictureBox1
             // 
@@ -76,6 +88,7 @@
             this.ClientSize = new System.Drawing.Size(500, 300);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.lblCraftedBy);
+            this.Controls.Add(this.lblUpdatedBy);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -94,6 +107,7 @@
         #endregion
 
         private System.Windows.Forms.Label lblCraftedBy;
+        private System.Windows.Forms.Label lblUpdatedBy;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblVersion;
     }

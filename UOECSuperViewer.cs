@@ -105,6 +105,63 @@ namespace UO_EC_Super_Viewer
         }
 
         /// <summary>
+        /// Ensure Idle action (25) is selected if available; otherwise pick the first available action.
+        /// </summary>
+        private void EnsureIdleActionSelected()
+        {
+            if ( CurrentMobile == null )
+                return;
+
+            // prefer idle action (25)
+            if ( CurrentMobile.Actions.Length > 25 && CurrentMobile.Actions[25] != null )
+            {
+                // update selection only if different
+                if ( m_SelectedAction != 25 )
+                {
+                    // dispose previous frames if needed
+                    if ( CurrentMobile.Actions[m_SelectedAction] != null )
+                        CurrentMobile.Actions[m_SelectedAction].DisposeFrames();
+
+                    m_SelectedAction = 25;
+
+                    // sync actions combo safely
+                    try
+                    {
+                        comboReset = true;
+                        if ( cmbActions.Items.Count > 0 )
+                            cmbActions.SelectedValue = m_SelectedAction;
+                    }
+                    catch { }
+                    finally { comboReset = false; }
+                }
+
+                return;
+            }
+
+            // otherwise ensure selected action is valid; pick first available if not
+            if ( CurrentMobile.Actions[m_SelectedAction] == null )
+            {
+                for ( int i = 0; i < CurrentMobile.Actions.Length; i++ )
+                {
+                    if ( CurrentMobile.Actions[i] != null )
+                    {
+                        m_SelectedAction = i;
+                        try
+                        {
+                            comboReset = true;
+                            if ( cmbActions.Items.Count > 0 )
+                                cmbActions.SelectedValue = m_SelectedAction;
+                        }
+                        catch { }
+                        finally { comboReset = false; }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// last frame played in the preview
         /// </summary>
         private int LastFramePlayed = 0;
@@ -1297,6 +1354,9 @@ namespace UO_EC_Super_Viewer
 
             // update the current actions list (to show only the available ones)
             UpdateActionsList( ref cmb );
+
+            // prefer Idle (25) when available, otherwise pick the first available action
+            EnsureIdleActionSelected();
 
             // update the preview
             ResetCurrentImage();
@@ -6206,8 +6266,8 @@ namespace UO_EC_Super_Viewer
                             // read unknown value
                             reader.ReadUInt16();
 
-                            // keep reading until the end of the file
-                            while ( reader.BaseStream.Length != reader.BaseStream.Position )
+                            // keep reading while there's at least enough data for header (id(4) + flag(1) + len(2) = 7 bytes)
+                            while ( reader.BaseStream.Position + 7 <= reader.BaseStream.Length )
                             {
                                 // read the ID
                                 int id = reader.ReadInt32();
@@ -6218,8 +6278,16 @@ namespace UO_EC_Super_Viewer
                                 // read string length
                                 int lgt = reader.ReadUInt16();
 
+                                // ensure the declared length is available
+                                if ( lgt < 0 || reader.BaseStream.Position + lgt > reader.BaseStream.Length )
+                                {
+                                    // malformed or truncated entry, stop parsing this file
+                                    break;
+                                }
+
                                 // read string
-                                string text = Encoding.UTF8.GetString( reader.ReadBytes( lgt ) );
+                                byte[] strBytes = reader.ReadBytes( lgt );
+                                string text = Encoding.UTF8.GetString( strBytes );
 
                                 // add the string to the cliloc
                                 cliloc.Add( new KeyValuePair<long, string>( id, text ) );

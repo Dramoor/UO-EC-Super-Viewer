@@ -331,9 +331,11 @@ namespace UO_EC_Super_Viewer
         /// <param name="vdFileName">VD file name</param>
         public void ExportToVD( string vdFileName, ExportVD xp )
         {
-            // is the VD anim type unknown?
-            if ( m_AnimType == -1 )
-                m_AnimType = (short) ( xp.toExport.Count == 35 ? 2 : xp.toExport.Count == 22 ? 0 : 1 );
+            // determine the VD animation type from the export dialog selection
+            // Always set the animation type based on the list provided by the dialog
+            // to avoid mismatches between the file name suffix (xp.fileAppend) and
+            // the actual animation type written into the VD header.
+            m_AnimType = (short) ( xp.toExport.Count == 35 ? 2 : xp.toExport.Count == 22 ? 0 : 1 );
 
             // break the file name in: path, file name and extension
             string fDir = Path.GetDirectoryName( vdFileName );

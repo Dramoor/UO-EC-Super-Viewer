@@ -215,6 +215,12 @@ namespace Mythic.Package
 			{
 				case 0x0: m_Compression = CompressionFlag.None; break;
 				case 0x1: m_Compression = CompressionFlag.Zlib; break;
+				// Compatibility: some newer clients use compression flags 0x2 or 0x3.
+				// Treat them as Zlib where possible so the viewer can attempt decompression.
+				case 0x2:
+				case 0x3:
+					m_Compression = CompressionFlag.Zlib;
+					break;
 				default: throw new InvalidCompressionException( flag );
 			}
 		}

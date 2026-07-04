@@ -10108,6 +10108,6 @@
 </value>
   </data>
   <data name="flute" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Test Spritesheets\flute.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>..\Test Spritesheets\flute.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
